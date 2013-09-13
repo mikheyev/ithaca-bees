@@ -9,7 +9,7 @@ for rec in SeqIO.parse("../ref/amel4.5.fa","fasta"):
 	start = 1
 	while 1:
 		if start + increment > len(rec):
-			print "-L %s:%i-%i" % (rec.id, start,len(rec)+1)
+			print "-L %s:%i-%i" % (rec.id, start,len(rec))
 			break
 		else:
 			print "-L %s:%i-%i" % (rec.id, start,start+increment)
