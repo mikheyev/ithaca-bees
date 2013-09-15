@@ -1,3 +1,5 @@
 *.o*
 *~
 data/
+.ipynb_checkpoints/
+*.log
