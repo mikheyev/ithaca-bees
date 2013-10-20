@@ -11,6 +11,7 @@ The first step was to align the reads to the reference using [bowtie2](http://bo
 ### SNP calling
 #### major_split.py
 - create a file of limits for GATK, corresponding to the 16 major chromosomes
+   - this was piped to data/scaffolds_long.txt
 #### bqsr.sh
 - perform base quality recalibration using known SNP sites from NCBI and validated sites kindly provided by Greg Hunt
 #### call.sh
@@ -53,5 +54,9 @@ The first step was to align the reads to the reference using [bowtie2](http://bo
 - compute covariance matrix using posterior probabilities of genotypes computed by angsd.sh
 
 
-
+### Still left to do
+- intersect beagle and angds results
+- iEHH (using rehh package in R)
+- visualize data
+- look at genes in beagle haplotype blocks
 
