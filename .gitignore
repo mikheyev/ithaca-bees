@@ -3,3 +3,5 @@
 data/
 .ipynb_checkpoints/
 *.log
+cluster2haps.jar
+ngsadmix32.cpp
