@@ -12,16 +12,20 @@ The first step was to align the reads to the reference using [bowtie2](http://bo
 #### major_split.py
 - create a file of limits for GATK, corresponding to the 16 major chromosomes
    - this was piped to data/scaffolds_long.txt
+
 #### bqsr.sh
 - perform base quality recalibration using known SNP sites from NCBI and validated sites kindly provided by Greg Hunt
+
 #### call.sh
 - starting with mapped fragments, call genotypes for all samples
+
 #### vqsr.sh
 - perform variant quality score recalibration to filter low-quality SNPs
 
 ### SNP frequency measurement using [ANGSD](http://popgen.dk/wiki/index.php/ANGSD)
 #### angsd.sh
 - compute minor allele frequencies for old and modern populations, and conduct likelihood ratio tests for significant changes
+
 #### intersect_mafs.py
 - intersect minor allele frequency files for old and modern populations
 
@@ -29,17 +33,22 @@ The first step was to align the reads to the reference using [bowtie2](http://bo
 ### Imputation and association testing using [BEAGLE](http://faculty.washington.edu/browning/beagle/beagle.html)
 #### vcf2bgl.sh
 - convert GATK vcf to BEAGLE format
+
 #### phase.sh
 - phase genotypes and impute missing values
+
 #### assoc.sh
 - association testing on imputed haplotypes, looking for evidence of selection between old and modern populations
    - This is a parallel analysis to likelihoood ratio testing with ANGDS
+
 ##### c2h.py and c2h.sh
 - extract haplotypes from BEAGLE results
+
 ### Differentiation between European and Africanized bees 
 #### ahb.sh
 - calculate Fst between populations with European and African ancestry using [vcftools](http://vcftools.sourceforge.net/options.html)
    - note: output files manually moved into the data directory
+
 #### angsd_ahb.sh
 - trying to compute Fst using [ngsutils](https://github.com/ngsutils/ngsutils).
    - this approach has not worked, given the different number of snp calls between samples.
@@ -48,8 +57,10 @@ The first step was to align the reads to the reference using [bowtie2](http://bo
 ### plotting differentiation between populations
 #### angsd2bgl.sh
 - generate BEAGLE-formatted data from ngs count data
+
 #### ngsAdmix.sh
 - use [NgsAdmix](http://www.popgen.dk/software/index.php/NgsAdmix) to infer ancestral population clusters
+
 #### pca.sh
 - compute covariance matrix using posterior probabilities of genotypes computed by angsd.sh
 
