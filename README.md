@@ -1,4 +1,4 @@
-# Whole-genome re-sequencing to examine genetic changes in a population of Ithaca, NY honeybees using samples collected in 1977 and 2011 using 
+# Whole-genome re-sequencing to examine genetic changes in a population of Ithaca, NY honeybees using samples collected in 1977 and 2011
 
 This repo contains the part of the analysis that was performed on the cluster. Downstream analysis done in R and plotting in python have not yet been added.
 
