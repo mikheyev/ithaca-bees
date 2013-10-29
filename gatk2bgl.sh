@@ -23,7 +23,7 @@ alias GA="java -Xmx"$MAXMEM"g -Djava.io.tmpdir=/genefs/MikheyevU/temp -jar /apps
 GA \
    -T ProduceBeagleInput \
    -R $ref \
-   -V data/recalibrated.filtered.passed.repeatmasked.vcf \
-   -o data/recalibrated.filtered.passed.repeatmasked.bgl
+   -V data/ithaca.vcf \
+   -o data/ithaca.bgl
 
-   gzip data/recalibrated.filtered.passed.repeatmasked.bgl
+   pigz data/ithaca.bgl
