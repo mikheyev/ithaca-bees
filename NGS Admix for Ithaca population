@@ -1,0 +1,32 @@
+---
+title: "NGS Admixture for Ithaca Populaton"
+author: "JA"
+date: "Monday, August 25, 2014"
+output: html_document
+---
+
+NGS Admixture for Ithaca Population for 2 source popualtions
+
+```{r}
+rm(list=ls())
+bee.pop="ithaca"
+
+#for (chr in 1:16){
+  # i is the number of populations
+    #par(mfrow=c(2,2))
+    for(i in 2:6){
+      pop<-read.table(paste("pop.info.", bee.pop, sep=""),as.is=T)    
+      #admix<-t(as.matrix(read.table(paste("files/",bee.pop ,"/", chr, ".", i,".qopt", sep=""))))    
+      admix<-t(as.matrix(read.table(paste("files/","/all", ".", i,".qopt", sep=""))))    
+      admix<-admix[,order(pop[,1])]    
+      pop<-pop[order(pop[,1]),]
+      #tiff(paste("plots/", bee.pop, ".", chr, ".", i,".tiff", sep=""))
+        #xlab="Individuals grouped in Population"
+        h<-barplot(admix,col=1:5,space=0,border=NA,ylab="Admixture", main=paste("Populations",i))
+        text(tapply(1:nrow(pop),pop[,1],mean),-0.05,unique(pop[,1]),xpd=T)
+    #dev.off()
+    
+      rm(admix)
+    }
+#}
+
