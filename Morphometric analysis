@@ -1,0 +1,120 @@
+---
+title: "Morpho-hbee1"
+author: "JA"
+date: "Monday, July 07, 2014"
+output: html_document
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# convert the data into 3d matrix of k * m * n dimensions
+make3dMatrix = function(dat){
+  		
+	k = 19 # number of landmarks
+	m = 2  # number of dimensions
+	ns = nrow(dat)	 # number of samples
+	
+	input = array(0, dim=c(k,m,ns))
+	for(n in 1:ns){
+		i = 1
+		for(k in 1:19){
+			for(m in 1:2){
+				input[k,m,n] =  unlist(dat[n,], use.names=F)[i]
+				i = i + 1
+			}
+		}
+	}
+
+	return(input)		
+}
+
+# average the coordinates
+average = function(tem){
+
+  temp = "averaged_aligned_OLD.txt"
+	file.create(temp)
+	i = 1
+	while(i < (nrow(tem))){
+				j = i + 1								
+				avg = (tem[i,] + tem[j,]) / 2
+				avg = paste(avg, collapse=" ")
+				write.table(avg, file=temp, append=T, col.names=F, row.names=F, quote=F)
+					i = j + 1
+	
+	}
+	
+}
+
+
+cnv = function(dat, groups){
+  
+	library(Morpho)
+	dat3 = make3dMatrix(dat)
+	cva = CVA(dat3, groups, weighting = F, plot = T, rounds = 0, cv = F)
+	cvascr = cva$CVscores
+	cva_frame = data.frame(cvascr, groups)
+	colnames(cva_frame) =  c(paste("cv",1:ncol(cvascr), sep=""), "year_group")
+	return(cva_frame)
+}
+
+# calculates principal components
+pca <- function(dat, groups){
+	
+	library(Morpho)
+	dat3 = make3dMatrix(dat)
+	pca = groupPCA(dat3, groups, rounds = 10000, cv = T, weighting = F)
+	pcascr = pca$Scores
+	pca_frame = data.frame(pcascr, groups)
+	colnames(pca_frame) = c(paste("pc",1:ncol(pcascr), sep=""), "year_group")
+	return(pca_frame)
+}
+
+# scatter plot, grouped by year
+visual_scatter <- function(dframe, comp, groups){
+	library(ggplot2)
+	p = ggplot(dframe, aes(1:nrow(dframe),dframe[,comp])) + geom_point(aes(color=factor(year_group))) + scale_colour_manual(values=cbPalette, labels=paste(levels(factor(dframe$year_group)),table(dframe$year_group)))
+	p = p + labs(list(title =  "Old vs Modern", x = "Year", y = paste("Variate",comp))) + theme(panel.background = element_blank())
+	p = p + scale_x_continuous( breaks = cumsum(table(groups)), labels = attributes(cumsum(table(groups)))$names)
+  p = p + geom_smooth(method="loess", size=1, color="red")
+	return(p)
+}
+
+
+visual_box = function(dframe, comp){
+  library(ggplot2)
+  p = ggplot(dframe, aes(year_group,dframe[,comp])) + geom_boxplot(notch = T)
+}
+
+##################################### Main ########################################
+#rm(list=ls())
+old = 32
+modern = 34
+dat = read.table("old_modern.txt", sep=" ", fill=T)
+#dat = dat[,-ncol(dat)]
+groups = c(rep("1977",old), rep("2011",modern))
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73")
+dframe = cnv(dat, groups)
+
+# scatter plot
+for (i in 1:(ncol(dframe)-1)){
+  comp = i
+  p = visual_scatter(dframe, comp, groups)
+  print(p)
+}
+
+# box plot
+p = visual_box(dframe, groups)
+print(p)
+
+# t-test between old and modern population
+data= dframe[,1]
+t.test(data[1:old], data[old+1:length(data)])
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
